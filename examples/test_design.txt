@@ -1,0 +1,5 @@
+samples V1
+cond1_rep1 0
+cond1_rep2 0
+cond2_rep1 1
+cond2_rep2 1
