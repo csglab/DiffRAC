@@ -38,5 +38,7 @@ DiffRAC <- function(design, counts, formula, num, denom)
                                 colData = design_mat,
                                 design = design_mat)
   dds <- DESeq(dds, full=design_mat, betaPrior = F)
-  return(dds)
+  res <- list(design_mat, dds)
+  names(res) <- c("model_mat", "dds")
+  return(res)
 }
