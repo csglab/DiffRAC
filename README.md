@@ -44,6 +44,9 @@ A `formula` indicating the relationship between the predictor and outcome variab
 
 The type of read counts that represent the numerator and denominator of the ratio are given to DiffRAC as the `num` and  `denom` parameters. These strings must be the identical to the two suffixes in the count table. In the current example num = "e" and denom = "i".
 
+## Sample-specific or condition-specific analyses
+
+`mode="sample"` should be used, except in the case of large sample sizes. The `mode="condition"` parameter can then be used, to consider condition-specific changes instead of sample-specific changes for the read type that is the ratio denominator. This will significantly decrease the run time.
 
 # The DiffRAC function
 
@@ -108,7 +111,7 @@ DiffRAC <- function(design, counts, formula, num, denom, mode)
 # Usage
 
 ```r
-DiffRAC_res <- DiffRAC(design, counts, formula, num, denom)
+DiffRAC_res <- DiffRAC(design, counts, formula, num, denom, mode)
 ```
 
 # Output
@@ -160,11 +163,17 @@ num <- "e"
 denom <- "i"
 ```
 
+Define the mode ("sample" should be used, except for large sample sizes):
+
+```r
+mode <- "sample"
+```
+
 And run DiffRAC:
 
 ```r
 source("../DiffRAC.R")
-DiffRAC_res <- DiffRAC(design, counts, formula, num, denom)
+DiffRAC_res <- DiffRAC(design, counts, formula, num, denom, mode)
 ```
 
 To get differential estimates (differential stability estimates here), for example in the condition V1 level 1 vs 0:
