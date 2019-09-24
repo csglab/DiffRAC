@@ -93,6 +93,11 @@ DiffRAC <- function(design, counts, formula, num, denom, mode)
     stop("Error: Mode not recognized")
   }
   
+  if(sum(!(row.names(design_mat) %in% colnames(counts))) > 0)
+  {
+    stop("Error: The samples in the experimental design and count matrix are not the same")
+  }
+  
   # Reorder the count table
   count_input <- data.frame(counts[, row.names(design_mat)], row.names = row.names(counts))
   
