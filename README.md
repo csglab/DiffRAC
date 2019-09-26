@@ -21,9 +21,11 @@ A simple `design` data.frame containing the sample names in the row.names, and t
 | cond4_rep1  |	0   | 1   |
 | cond4_rep1  | 0   | 1   |
 
+Please avoid the use of "-" and "." in the sample names. Names should also not start with a number.
+
 ## Count table
 
-A `counts` data.frame including counts from the two types of reads (e.g. exonic and intronic read counts for the inference of differential mRNA stability) such as the one below. The count column titles must match the sample names in the design table, with the addition suffixes, denoting the two types of read counts (here ".e" and ".i" denote exonic and intronic read counts). The suffixes will define the reads that will be used as the numerator or denominator of the ratio. The suffixes must be separated from the sample name by a period ".". Please do not add additional periods to the sample names or suffix. The row names must contain gene IDs.
+A `counts` data.frame including counts from the two types of reads (e.g. exonic and intronic read counts for the inference of differential mRNA stability) such as the one below. The count column titles must match the sample names in the design table, with the addition suffixes, denoting the two types of read counts (here ".e" and ".i" denote exonic and intronic read counts). The suffixes will define the reads that will be used as the numerator or denominator of the ratio. The suffixes must be separated from the sample name by a period ".". Again, please avoid the use of "-" and "." in the sample names and inside the suffixes. Names should not start with a number. The row names must contain gene IDs.
 
 | Gene_ID | cond1_rep1.e  | cond1_rep1.i  | cond1_rep2.e  | cond1_rep2.i  | cond2_rep1.e  | cond2_rep1.i  | cond2_rep2.e  | cond2_rep2.i  | cond3_rep1.e  | cond3_rep1.i  | cond3_rep2.e  | cond3_rep2.i  | cond4_rep1.e  | cond4_rep1.i  | cond4_rep2.e  | cond4_rep2.i  |
 | ------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
