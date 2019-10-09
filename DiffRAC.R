@@ -21,8 +21,8 @@ DiffRAC <- function(design, counts, formula, num, denom, mode)
   # Create the design matrix, for the sample-specific mode
   ident <- diag(n) 
   design_mat <- rbind(ident, ident)
-  readTypeB <- c(rep(0, nrow(ident)), rep(1, nrow(ident))) 
-  design_mat <- cbind(design_mat, readTypeB)
+  readTypeNum <- c(rep(0, nrow(ident)), rep(1, nrow(ident))) 
+  design_mat <- cbind(design_mat, readTypeNum)
   model_mat <- model.matrix(formula, data = model.frame(formula, data = design))
   model_mat <- model_mat[, -1, drop=F]
   ext_model_mat <- rbind(matrix(0, nrow = nrow(model_mat), ncol = ncol(model_mat)), model_mat)
