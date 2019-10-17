@@ -61,7 +61,7 @@ DiffRAC <- function(design, counts, formula, num, denom, mode)
   library(plyr)
   
   # Inspect the design to require at least two replicates per condition
-  if (sum(count(design, vars = colnames(design))$freq < 2) > 0)
+  if (sum(plyr::count(design, vars = colnames(design))$freq < 2) > 0)
   {
     stop("Error: At least two replicates per condition are required")
   }
