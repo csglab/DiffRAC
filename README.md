@@ -21,6 +21,15 @@ A simple `design` data.frame containing the sample names in the row.names, and t
 | cond4_rep1  |	0   | 1   |
 | cond4_rep1  | 0   | 1   |
 
+Another valid example:
+
+| samples | cell_type |
+| ------- | --------- |
+| s1      |	HepG2     |
+| s2      |	HepG2     |
+| s3      |	K562      |
+| s4      |	K562      |
+
 Please avoid the use of "-" and "." in the sample names. Names should also not start with a number.
 
 ## Count table
