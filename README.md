@@ -23,12 +23,21 @@ A simple `design` data.frame containing the sample names in the row.names, and t
 
 Another valid example:
 
-| samples | cell_type |                                | samples | HepG2 |
-| ------- | --------- |                                | ------- | ----- |
-| s1      |	HepG2     |                                | s1      |	0    |
-| s2      |	HepG2     |                                | s2      |	0    |
-| s3      |	K562      |                                | s3      |	1    |
-| s4      |	K562      |      which is equivalent to    | s4      |	1    |
+| samples | cell_type |                                
+| ------- | --------- |                              
+| s1      |	HepG2     |                          
+| s2      |	HepG2     |                            
+| s3      |	K562      |                         
+| s4      |	K562      |      
+
+Which is equivalent to:
+
+| samples | HepG2 |                                
+| ------- | ----- |                              
+| s1      |	0     |                          
+| s2      |	0     |                            
+| s3      |	1     |                         
+| s4      |	1     |
 
 Please avoid the use of "-" and "." in the sample names. Names should also not start with a number.
 
