@@ -8,7 +8,7 @@ The input data example shown here represents an experimental design with two var
 
 ## Experimental design
 
-A simple `design` data.frame containing the sample names in the row.names, and the experimental variables in the columns with appropriate headers. The variables may be factors or numerical, and the user needs to make sure that the data has the intended class. A minimum of two replicates per condition (or per combination of conditions) for the variable of interest should be used. Sample names need to be given as row.names. For example:
+A simple `design` data.frame containing the sample names in the row.names, and the experimental variables in the columns with appropriate headers. The variables may be factors or numerical, and the user needs to make sure that the data has the intended class. There must be no NA values in the design. A minimum of two replicates per condition (or per combination of conditions) for the variable of interest should be used. Sample names need to be given as row.names. For example:
 
 | samples     | V1  | V2  |
 | ----------- | --- | --- |
