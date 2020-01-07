@@ -8,7 +8,7 @@ The input data example shown here represents an experimental design with two var
 
 ## Experimental design
 
-A simple `design` data.frame containing the sample names in the row.names, and the experimental variables in the columns with appropriate headers. The variables may be factors or numerical, and the user needs to make sure that the data has the intended class. A minimum of two replicates per condition (or per combination of conditions) is required. Sample names need to be given as row.names. For example:
+A simple `design` data.frame containing the sample names in the row.names, and the experimental variables in the columns with appropriate headers. The variables may be factors or numerical, and the user needs to make sure that the data has the intended class. A minimum of two replicates per condition (or per combination of conditions) for the variable of interest should be used. Sample names need to be given as row.names. For example:
 
 | samples     | V1  | V2  |
 | ----------- | --- | --- |
@@ -78,10 +78,10 @@ DiffRAC <- function(design, counts, formula, num, denom, mode)
   library(DESeq2)
   library(plyr)
   
-  # Inspect the design to require at least two replicates per condition
+  # Inspect the design and warn if there are less two replicates per condition for some variables
   if (sum(plyr::count(design, vars = colnames(design))$freq < 2) > 0)
   {
-    stop("Error: At least two replicates per condition are required")
+    warning("WARNING: One or more conditions do not have replicates")
   }
   
   # Define the number of samples
@@ -92,7 +92,7 @@ DiffRAC <- function(design, counts, formula, num, denom, mode)
   design_mat <- rbind(ident, ident)
   readTypeNum <- c(rep(0, nrow(ident)), rep(1, nrow(ident))) 
   design_mat <- cbind(design_mat, readTypeNum)
-  model_mat <- model.matrix(formula, data = model.frame(formula, data = design))
+  model_mat <- model.matrix(formula, data = model.frame(formula, data = design)) # will drop rows with NAs
   model_mat <- model_mat[, -1, drop=F]
   ext_model_mat <- rbind(matrix(0, nrow = nrow(model_mat), ncol = ncol(model_mat)), model_mat)
   design_mat <- cbind(design_mat, ext_model_mat)
