@@ -62,37 +62,29 @@ The count matrix or count data frame for the numerator type. The rows and column
 
 ## count_denom
 
-The count matrix or count data frame for the denominator type (intronic reads)
-
-# The read types to be used as numerator and denominator of the count ratio must be specified using their suffixes
-## Count ratio numerator and denominator
-
-The type of read counts that represent the numerator and denominator of the ratio are given to DiffRAC as the `num` and  `denom` parameters. These strings must be the identical to the two suffixes in the count table. In the current example num = "e" and denom = "i".
+The count matrix or count data frame for the denominator type, similar to `count_num`.
 
 ## mode
 
-Optionally, for large sample sizes, a condition-specific analysis can be performed, instead of a sample-specific investigation.
+Either `condition` or `sample`. Optionally, for large sample sizes, a condition-specific analysis can be performed, using the `condition` option, instead of a sample-specific investigation. This will significantly decrease the run time. The default is `mode="condition"`
 
-Either "condition" or "sample"
+## bias
 
-`mode="sample"` should be used, except in the case of large sample sizes. The `mode="condition"` parameter can then be used, to consider condition-specific changes instead of sample-specific changes for the read type that is the ratio denominator. This will significantly decrease the run time.
+The "bias" constant.  Optionally, the bias term can be supplied by the user. The default is `bias=1`
 
-# bias: The "bias" constant
+## optimizeBias
 
-optionally perform an optimization to obtain the bias term
-alternatively, the bias term can be supplied by the user (or be left as 1, which is the default).
+Optionally, an optimization can be performed to obtain the bias term, using `optimizeBias=T`. The default is `optimizeBias=F`.
 
 # The DiffRAC function
 
-
-
-# Usage
+## Usage
 
 ```r
 DiffRAC_res <- DiffRAC(design, counts, formula, num, denom, mode)
 ```
 
-# Output
+## Output
 
 Returns the customized model matrix and a DESeq dds object
 
