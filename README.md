@@ -55,7 +55,7 @@ Please avoid the use of "-" and "." in the sample names. Names should also not s
 
 ### formula
 
-A `formula` indicating the relationship between the predictor and outcome variables. The variable names must be the same as in the design matrix. For example: 
+A formula indicating the relationship between the predictor and outcome variables. The variable names must be the same as in the design matrix. For example: 
 
 \~ V1 + V2 + V1:V2
 
