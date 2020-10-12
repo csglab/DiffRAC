@@ -90,26 +90,18 @@ Optionally, an optimization can be performed to obtain the bias term, using `opt
 
 ## Output
 
-Returns the customized model matrix and a DESeq dds object
+DiffRAC returns a list with three elements:
 
-DiffRAC returns a list with two elements:
+  1. `model_mat`: The customized model matrix created by DiffRAC
+  2. `counts`: The counts used by DiffRAC
+  3. `dds`: The DESeq dds object containing the differential estimates.
 
-The first element is the customized model matrix created by DiffRAC.
+## Details
 
-```r
-DiffRAC_res$model_mat
-```
+The user can then use their own contrasts and follow the DESeq2 documentation to get differential estimates (as a log2 fold-change) and identify differential events. Please note that in case of factor variables, the variable names will be different from the inputed design and formula to the resulting dds object. For example, for a variable V1 with levels 0 and 1, a column V1 will be returned. For a variable V1 with levels "control" and "treatment", a column V1treatment will be returned. In the case of a variable V1 with levels "a", "b", and "c", then the design will contain V1b and V1c columns, each representing the change in stability relative to reference level "a". For numeric variables, the name will remain the same.
 
-The second element is a DESeq `dds` object (output from DESeqDataSetFromMatrix and DESeq functions). The user can then use their own contrasts and follow the DESeq2 documentation to get differential estimates (as a log2 fold-change) and identify differential events (such as differentially stabilized genes in this example).
+Finally, differential events can be identified by filtering for padj < 0.05, for example.
 
-```r
-DiffRAC_res$dds
- ```
-Please note that in case of factor variables, the variable names will be different from the inputed design and formula to the resulting dds object. For example, for a variable V1 with levels 0 and 1, a column V1 will be returned. For a variable V1 with levels "control" and "treatment", a column V1treatment will be returned. In the case of a variable V1 with levels "a", "b", and "c", then the design will contain V1b and V1c columns, each representing the change in stability relative to reference level "a". For numeric variables, the name will remain the same.
-
-Differential events can be identified by filtering for padj < 0.1, for example.
-
------------------
 
 # DiffRAC.initialize
 
@@ -133,8 +125,17 @@ Lower-level function called within DiffRAC. Modifies the bias term for a design 
 
 ## Usage
 
+DiffRAC.modifyBias(design_mat, mode, ratio)
+
 ## Arguments
+
+Please refer to the main DiffRAC function for the other arguments.
 
 ### ratio
 
 The ratio of the new bias constant to the previous bias constant
+
+
+
+
+
