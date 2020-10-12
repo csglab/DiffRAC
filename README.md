@@ -4,22 +4,6 @@ A R framework to compare sequencing count ratios using a customized model matrix
 
 An example analysis can be found at `./examples`. 
 
-# DiffRAC.initialize
-
-## Description
-
-## Usage
-
-## Arguments
-
-# DiffRAC.modifyBias
-
-## Description
-
-## Usage
-
-## Arguments
-
 # DiffRAC
 
 ## Description
@@ -125,3 +109,32 @@ Please note that in case of factor variables, the variable names will be differe
 
 Differential events can be identified by filtering for padj < 0.1, for example.
 
+-----------------
+
+# DiffRAC.initialize
+
+## Description
+
+Lower-level function called within DiffRAC. Loads the libraries required by DiffRAC and verifies the compatibility of the design and count tables. Creates the model matrix and prepares the count tables that the main DiffRAC function will use as input. 
+
+## Usage
+
+DiffRAC.initialize(formula, design, counts_num, counts_denom, mode, bias=1)
+
+## Arguments
+
+Please refer to the DiffRAC main function.
+
+# DiffRAC.modifyBias
+
+## Description
+
+Lower-level function called within DiffRAC. Modifies the bias term for a design matrix that is already constructed. 
+
+## Usage
+
+## Arguments
+
+### ratio
+
+The ratio of the new bias constant to the previous bias constant
