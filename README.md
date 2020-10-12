@@ -78,7 +78,7 @@ The count matrix or count data frame for the denominator type, similar to `count
 
 ### mode
 
-Either `condition` or `sample`. Optionally, for large sample sizes, a condition-specific analysis can be performed, using the `condition` option, instead of a sample-specific investigation. This will significantly decrease the run time. The default is `mode="condition"`
+Either "condition" or "sample". Optionally, for large sample sizes, a condition-specific analysis can be performed, using the `condition` option, instead of a sample-specific investigation. This will significantly decrease the run time. The default is `mode="condition"`
 
 ### bias
 
