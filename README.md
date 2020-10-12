@@ -111,7 +111,9 @@ Lower-level function called within DiffRAC. Loads the libraries required by Diff
 
 ## Usage
 
+```r
 DiffRAC.initialize(formula, design, counts_num, counts_denom, mode, bias=1)
+```
 
 ## Arguments
 
@@ -125,7 +127,9 @@ Lower-level function called within DiffRAC. Modifies the bias term for a design 
 
 ## Usage
 
+```r
 DiffRAC.modifyBias(design_mat, mode, ratio)
+```
 
 ## Arguments
 
