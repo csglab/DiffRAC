@@ -2,7 +2,7 @@
 
 A R framework to compare sequencing count ratios using a customized model matrix and DESeq2, from an experimental design, a formula and a read count tables. 
 
-An example analysis can be found in the *examples* directory. 
+An example analysis can be found at `./examples`. 
 
 # Inputs 
 
@@ -43,8 +43,6 @@ Please avoid the use of "-" and "." in the sample names. Names should also not s
 
 ## formula
 
-The model formula for samples
-
 A `formula` indicating the relationship between the predictor and outcome variables. The variable names must be the same as in the design matrix. For example: 
 
 \~ V1 + V2 + V1:V2
@@ -52,19 +50,15 @@ A `formula` indicating the relationship between the predictor and outcome variab
 
 ## count_num
 
-The count matrix or count data frame for the numerator type (exonic reads)
+The count matrix or count data frame for the numerator type. The rows and columns must match and be in the same order as the `count_denom` table. Column names should match the sample names in the design matrix (but not necessarily with the same order). Names should not start with a number. The row names must contain gene IDs.
 
-user would enter two different matrices for the exonic or intronic reads, but the rows and columns have to be in the same order, and the column names would have to match the sample names in the design matrix (although not necessarily with the same order)
-
-A `counts` data.frame including counts from the two types of reads (e.g. exonic and intronic read counts for the inference of differential mRNA stability) such as the one below. The count column titles must match the sample names in the design table, with the addition suffixes, denoting the two types of read counts (here ".e" and ".i" denote exonic and intronic read counts). The suffixes will define the reads that will be used as the numerator or denominator of the ratio. The suffixes must be separated from the sample name by a period ".". Again, please avoid the use of "-" and "." in the sample names and inside the suffixes. Names should not start with a number. The row names must contain gene IDs.
-
-| Gene_ID | cond1_rep1.e  | cond1_rep1.i  | cond1_rep2.e  | cond1_rep2.i  | cond2_rep1.e  | cond2_rep1.i  | cond2_rep2.e  | cond2_rep2.i  | cond3_rep1.e  | cond3_rep1.i  | cond3_rep2.e  | cond3_rep2.i  | cond4_rep1.e  | cond4_rep1.i  | cond4_rep2.e  | cond4_rep2.i  |
-| ------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 22746   | 29  | 3   | 27  | 2   | 47  | 3   | 37  | 2   | 52  | 26  | 50  | 25  | 70  | 26  | 60  | 25  |
-| 235623  | 122 | 92  | 90  | 18  | 299 | 45  | 454 | 177 | 145 | 115 | 113 | 41  | 322 | 68  | 477 | 200 |
-| 238690  | 18  | 14  | 6   | 8   | 71  | 22  | 60  | 16  | 41  | 37  | 29  | 31  | 94  | 45  | 83  | 39  |
-| 330369  | 5   | 35  | 4   | 17  | 149 | 55  | 276 | 149 | 28  | 58  | 27  | 40  | 172 | 78  | 299 | 172 |
-| ...     | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
+| Gene_ID | cond1_rep1  | cond1_rep2  | cond2_rep1  | cond2_rep2  | cond3_rep1  | cond3_rep2  | cond4_rep1  | cond4_rep2  |
+| ------- | --- | --- | --- | --- | --- | --- | --- | 
+| 22746   | 29  | 3   | 27  | 2   | 47  | 3   | 37  | 
+| 235623  | 122 | 92  | 90  | 18  | 299 | 45  | 454 | 
+| 238690  | 18  | 14  | 6   | 8   | 71  | 22  | 60  | 
+| 330369  | 5   | 35  | 4   | 17  | 149 | 55  | 276 | 
+| ...     | ... | ... | ... | ... | ... | ... | ... | 
 
 ## count_denom
 
@@ -119,52 +113,4 @@ Please note that in case of factor variables, the variable names will be differe
 
 Differential events be identified by filtering for padj < 0.1, for example.
 
-# Example
 
-An example dataset is provided at `./examples`. Move into this folder, and load the read counts:
-
-```r
-counts <- as.matrix(read.table("test_counts.txt", header = T, row.names=1))
-```
-
-Then load the experimental design:
-
-```r
-design <- as.data.frame(read.table("test_design.txt", header = T, row.names=1))
-```
-
-Define the formula:
-
-```r
-formula <- as.formula(~ V1)
-```
-
-Define the numerator and denominator of the count ratio:
-
-```r
-num <- "e"
-```
-
-```r
-denom <- "i"
-```
-
-Define the mode ("sample" should be used, except for large sample sizes):
-
-```r
-mode <- "sample"
-```
-
-And run DiffRAC:
-
-```r
-source("../DiffRAC.R")
-DiffRAC_res <- DiffRAC(design, counts, formula, num, denom, mode)
-```
-
-To get differential estimates (differential stability estimates here), for example in the condition V1 level 1 vs 0:
-
-```r
-res <- as.data.frame(results(DiffRAC_res$dds, name="V1"))
-head(res)
-```
