@@ -1,14 +1,14 @@
-# DiffRAC: A flexible R function for comparing response proportions in high-throughput sequencing count data
+# DiffRAC: A flexible R framework for comparing response proportions in high-throughput sequencing count data
 
-A R function to compare sequencing count ratios using a customized model matrix and DESeq2, from an experimental design, a formula and a read count table. In the example presented here, differential mRNA stability is being inferred from the ratios of exonic and intronic read counts.
+A R framework to compare sequencing count ratios using a customized model matrix and DESeq2, from an experimental design, a formula and a read count tables. 
 
-# Input data
+An example analysis can be found in the *examples* directory. 
 
-The input data example shown here represents an experimental design with two variables/treatments/conditions of interest. This function is designed to accomodate any number of experimental variables and the inclusion of interaction terms. 
+# Inputs 
 
-## Experimental design
+## design
 
-A simple `design` data.frame containing the sample names in the row.names, and the experimental variables in the columns with appropriate headers. The variables may be factors or numerical, and the user needs to make sure that the data has the intended class. There must be no NA values in the design. A minimum of two replicates per condition (or per combination of conditions) for the variable of interest should be used. Sample names need to be given as row.names. For example:
+The design data frame. Each row is one sample, and each column is an experimental variable. Sample names should be indicated as row.names, and the experimental variables as column names. Sample names have to match the column names in the count matrices (but not necessarily in the same order). The variables may be factors or numerical, and the user needs to make sure that the data has the intended class. There must be no NA values in the design. A minimum of two replicates per condition (or per combination of conditions) for the variable of interest should be used. For example:
 
 | samples     | V1  | V2  |
 | ----------- | --- | --- |
@@ -23,25 +23,38 @@ A simple `design` data.frame containing the sample names in the row.names, and t
 
 Another valid example:
 
-| samples | cell_type |                                
-| ------- | --------- |                              
-| s1      |	HepG2     |                          
-| s2      |	HepG2     |                            
-| s3      |	K562      |                         
-| s4      |	K562      |      
+| samples | cell_type      |                                
+| ------- | -------------- |                              
+| s1      |	cellLineA      |                          
+| s2      |	cellLineA      |                            
+| s3      |	cellLineB      |                         
+| s4      |	cellLineB      |      
 
 Which is equivalent to:
 
-| samples | HepG2 |                                
-| ------- | ----- |                              
-| s1      |	0     |                          
-| s2      |	0     |                            
-| s3      |	1     |                         
-| s4      |	1     |
+| samples | cellLineA |                                
+| ------- | --------- |                              
+| s1      |	0         |                          
+| s2      |	0         |                            
+| s3      |	1         |                         
+| s4      |	1         |
 
 Please avoid the use of "-" and "." in the sample names. Names should also not start with a number.
 
-## Count table
+## formula
+
+The model formula for samples
+
+A `formula` indicating the relationship between the predictor and outcome variables. The variable names must be the same as in the design matrix. For example: 
+
+\~ V1 + V2 + V1:V2
+
+
+## count_num
+
+The count matrix or count data frame for the numerator type (exonic reads)
+
+user would enter two different matrices for the exonic or intronic reads, but the rows and columns have to be in the same order, and the column names would have to match the sample names in the design matrix (although not necessarily with the same order)
 
 A `counts` data.frame including counts from the two types of reads (e.g. exonic and intronic read counts for the inference of differential mRNA stability) such as the one below. The count column titles must match the sample names in the design table, with the addition suffixes, denoting the two types of read counts (here ".e" and ".i" denote exonic and intronic read counts). The suffixes will define the reads that will be used as the numerator or denominator of the ratio. The suffixes must be separated from the sample name by a period ".". Again, please avoid the use of "-" and "." in the sample names and inside the suffixes. Names should not start with a number. The row names must contain gene IDs.
 
@@ -53,85 +66,31 @@ A `counts` data.frame including counts from the two types of reads (e.g. exonic 
 | 330369  | 5   | 35  | 4   | 17  | 149 | 55  | 276 | 149 | 28  | 58  | 27  | 40  | 172 | 78  | 299 | 172 |
 | ...     | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
 
+## count_denom
 
-## Formula
+The count matrix or count data frame for the denominator type (intronic reads)
 
-A `formula` indicating the relationship between the predictor and outcome variables. The variable names must be the same as in the design matrix. For example: 
-
-\~ V1 + V2 + V1:V2
-
+# The read types to be used as numerator and denominator of the count ratio must be specified using their suffixes
 ## Count ratio numerator and denominator
 
 The type of read counts that represent the numerator and denominator of the ratio are given to DiffRAC as the `num` and  `denom` parameters. These strings must be the identical to the two suffixes in the count table. In the current example num = "e" and denom = "i".
 
-## Sample-specific or condition-specific analyses
+## mode
+
+Optionally, for large sample sizes, a condition-specific analysis can be performed, instead of a sample-specific investigation.
+
+Either "condition" or "sample"
 
 `mode="sample"` should be used, except in the case of large sample sizes. The `mode="condition"` parameter can then be used, to consider condition-specific changes instead of sample-specific changes for the read type that is the ratio denominator. This will significantly decrease the run time.
 
+# bias: The "bias" constant
+
+optionally perform an optimization to obtain the bias term
+alternatively, the bias term can be supplied by the user (or be left as 1, which is the default).
+
 # The DiffRAC function
 
-```r
 
-DiffRAC <- function(design, counts, formula, num, denom, mode)
-{
-  # Load the libraries
-  library(DESeq2)
-  library(plyr)
-  
-  # Inspect the design and warn if there are less two replicates per condition for some variables
-  if (sum(plyr::count(design, vars = colnames(design))$freq < 2) > 0)
-  {
-    warning("WARNING: One or more conditions do not have replicates")
-  }
-  
-  # Define the number of samples
-  n <- nrow(design)
-  
-  # Create the design matrix, for the sample-specific mode
-  ident <- diag(n) 
-  design_mat <- rbind(ident, ident)
-  readTypeNum <- c(rep(0, nrow(ident)), rep(1, nrow(ident))) 
-  design_mat <- cbind(design_mat, readTypeNum)
-  model_mat <- model.matrix(formula, data = model.frame(formula, data = design)) # will drop rows with NAs
-  model_mat <- model_mat[, -1, drop=F]
-  ext_model_mat <- rbind(matrix(0, nrow = nrow(model_mat), ncol = ncol(model_mat)), model_mat)
-  design_mat <- cbind(design_mat, ext_model_mat)
-  colnames(design_mat)[1:n] <- paste("s", (1:n), sep="")
-  design_mat[,1] <- 1
-  colnames(design_mat)[1] <- "(Intercept)"
-  row.names(design_mat) <- c(paste(row.names(design), ".", denom, sep=""), paste(row.names(design), ".", num, sep=""))
-  
-  if (mode == "condition") # Condition-specific mode
-  {
-    colnames(model_mat) <- paste(colnames(model_mat), "_cond", sep="")
-    design_mat_cond <- design_mat[, -(2:n)]
-    design_mat_cond <- cbind(design_mat[,1, drop=F], rbind(model_mat, model_mat), design_mat_cond[, 2:ncol(design_mat_cond)])
-    row.names(design_mat_cond) <- row.names(design_mat)
-    design_mat <- design_mat_cond
-  } else if (mode != "sample")
-  {
-    stop("Error: Mode not recognized")
-  }
-  
-  if(sum(!(row.names(design_mat) %in% colnames(counts))) > 0)
-  {
-    stop("Error: The samples in the experimental design and count matrix are not the same")
-  }
-  
-  # Reorder the count table
-  count_input <- data.frame(counts[, row.names(design_mat)], row.names = row.names(counts))
-  
-  # Run DESeq2
-  dds <- DESeqDataSetFromMatrix(countData = count_input,
-                                colData = design_mat,
-                                design = design_mat)
-  dds <- DESeq(dds, full=design_mat, betaPrior = F)
-  res <- list(design_mat, dds)
-  names(res) <- c("model_mat", "dds")
-  return(res)
-}
-
-```
 
 # Usage
 
@@ -140,6 +99,8 @@ DiffRAC_res <- DiffRAC(design, counts, formula, num, denom, mode)
 ```
 
 # Output
+
+Returns the customized model matrix and a DESeq dds object
 
 DiffRAC returns a list with two elements:
 
