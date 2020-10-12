@@ -53,12 +53,12 @@ A `formula` indicating the relationship between the predictor and outcome variab
 The count matrix or count data frame for the numerator type. The rows and columns must match and be in the same order as the `count_denom` table. Column names should match the sample names in the design matrix (but not necessarily with the same order). Names should not start with a number. The row names must contain gene IDs.
 
 | Gene_ID | cond1_rep1  | cond1_rep2  | cond2_rep1  | cond2_rep2  | cond3_rep1  | cond3_rep2  | cond4_rep1  | cond4_rep2  |
-| ------- | --- | --- | --- | --- | --- | --- | --- | 
-| 22746   | 29  | 3   | 27  | 2   | 47  | 3   | 37  | 
-| 235623  | 122 | 92  | 90  | 18  | 299 | 45  | 454 | 
-| 238690  | 18  | 14  | 6   | 8   | 71  | 22  | 60  | 
-| 330369  | 5   | 35  | 4   | 17  | 149 | 55  | 276 | 
-| ...     | ... | ... | ... | ... | ... | ... | ... | 
+| ------- | --- | --- | --- | --- | --- | --- | --- | --- | 
+| 22746   | 29  | 3   | 27  | 2   | 47  | 3   | 37  | 5   | 
+| 235623  | 122 | 92  | 90  | 18  | 299 | 45  | 454 | 6   | 
+| 238690  | 18  | 14  | 6   | 8   | 71  | 22  | 60  | 34   | 
+| 330369  | 5   | 35  | 4   | 17  | 149 | 55  | 276 | 23   | 
+| ...     | ... | ... | ... | ... | ... | ... | ... | ... | 
 
 ## count_denom
 
