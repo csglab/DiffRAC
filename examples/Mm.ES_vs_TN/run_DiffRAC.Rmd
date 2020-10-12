@@ -1,0 +1,57 @@
+---
+title: Application of DiffRAC to identify differentially stable genes between mouse ES and TN cells
+author:
+- name: Hamed S. Najafabadi
+- name: Gabrielle Perron
+output:
+  html_notebook:
+    df_print: paged
+  html_document:
+    df_print: paged
+---
+
+# Load libraries
+```{r}
+source("../../DiffRAC.R")
+```
+
+
+# Read the count files and design matrix
+```{r}
+exon_counts <- as.matrix( read.table("counts.e.txt", header = T, row.names=1) )
+intron_counts <- as.matrix( read.table("counts.i.txt", header = T, row.names=1) )
+design <- as.data.frame( read.table("design.txt", header = T) )
+rownames( design ) <- design[,1]
+```
+
+# Run DiffRAC
+```{r}
+diffrac_res <- DiffRAC( ~ CellType,
+         design,
+         exon_counts,intron_counts,
+         "sample",
+         optimizeBias = T)
+```
+
+
+
+The design data frame:
+```{r}
+as.data.frame( diffrac_res$model_mat )
+```
+
+
+
+The results:
+```{r}
+res <- as.data.frame( results(diffrac_res$dds,name = "CellTypeTN.Ratio") )
+res[ order(res$padj), ]
+```
+
+
+# Session info
+```{r}
+sessionInfo()
+```
+
+

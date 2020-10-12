@@ -1,0 +1,5 @@
+Samples CellType
+ES_rep1 ES
+ES_rep2 ES
+TN_rep1 TN
+TN_rep2 TN
