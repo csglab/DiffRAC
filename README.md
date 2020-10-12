@@ -24,7 +24,13 @@ An example analysis can be found at `./examples`.
 
 ## Description
 
+The main function. Infers the change in the response ratios using the customized model matrix and DESeq2, from the experimental design, the read count matrix, and the formula provided by the user
+
 ## Usage
+
+```r
+DiffRAC_res <- DiffRAC(formula, design, counts_num, counts_denom, mode="condition", bias=1, optimizeBias=F)
+```
 
 ## Arguments
 
@@ -98,14 +104,6 @@ The "bias" constant.  Optionally, the bias term can be supplied by the user. The
 
 Optionally, an optimization can be performed to obtain the bias term, using `optimizeBias=T`. The default is `optimizeBias=F`.
 
------------
-
-## Usage
-
-```r
-DiffRAC_res <- DiffRAC(design, counts, formula, num, denom, mode)
-```
-
 ## Output
 
 Returns the customized model matrix and a DESeq dds object
@@ -125,10 +123,5 @@ DiffRAC_res$dds
  ```
 Please note that in case of factor variables, the variable names will be different from the inputed design and formula to the resulting dds object. For example, for a variable V1 with levels 0 and 1, a column V1 will be returned. For a variable V1 with levels "control" and "treatment", a column V1treatment will be returned. In the case of a variable V1 with levels "a", "b", and "c", then the design will contain V1b and V1c columns, each representing the change in stability relative to reference level "a". For numeric variables, the name will remain the same.
 
-Differential events be identified by filtering for padj < 0.1, for example.
-
------------------
-
-
-
+Differential events can be identified by filtering for padj < 0.1, for example.
 
