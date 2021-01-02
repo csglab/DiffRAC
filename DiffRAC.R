@@ -37,13 +37,6 @@ DiffRAC.initialize <- function(formula, design, counts_num, counts_denom, mode, 
   # put the rows in the same order as columns of the count matrix
   design <- design[ match( colnames(counts_num), rownames(design) ) , ]
   
-  ### I don't think this section works in general the way it's supposed to - plyr:count would count the occurrances of the cominbation of all columns - what if the user is interested in only a few combinations?
-  # # Inspect the design and warn if there are less two replicates per condition for some variables
-  # if (sum(plyr::count(design, vars = colnames(design))$freq < 2) > 0)
-  # {
-  #   warning("WARNING: One or more conditions do not have replicates")
-  # }
-
   # First, create the experiment design matrix (regardless of intron/exon status)
   model_mat <- model.matrix(
     formula,
@@ -52,8 +45,6 @@ DiffRAC.initialize <- function(formula, design, counts_num, counts_denom, mode, 
   ## Note: I changed it from model_mat[,-1], because the user might specify a formula that leads to no intercept, or a model that leads to another variable that is entirely constant and therfore co-linear with intercept
   keep <- !( apply(model_mat,2,sd)==0 ) # any columns that have no variance (including intercept) will be dropped
   model_mat <- model_mat[, keep, drop=F]
-
-  #### I found the rest of the code a bit confusing, so I just rearranged it
 
   # Define the number of samples
   n <- nrow(model_mat)
