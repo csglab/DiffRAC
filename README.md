@@ -1,6 +1,6 @@
 # DiffRAC: A flexible R framework for comparing response proportions in high-throughput sequencing count data
 
-A R framework to compare sequencing count ratios using a customized model matrix and DESeq2, from an experimental design, a formula and a read count tables. 
+Differential Ratio Analysis in Count data (DiffRAC) is a R framework to compare sequencing count ratios using a customized model matrix and DESeq2, from an experimental design, a formula and a read count tables. 
 
 An example analysis can be found at `./examples`. 
 
