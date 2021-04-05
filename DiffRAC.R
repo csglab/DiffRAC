@@ -35,7 +35,7 @@ DiffRAC.initialize <- function(formula, design, counts_num, counts_denom, mode, 
     stop("Incompatible or incomplete design matrix: some samples with count data were not found in design.")
   }
   # put the rows in the same order as columns of the count matrix
-  design <- design[ match( colnames(counts_num), rownames(design) ) , ]
+  design <- design[ match( colnames(counts_num), rownames(design) ) , , drop=F]
   
   # First, create the experiment design matrix (regardless of intron/exon status)
   model_mat <- model.matrix(
