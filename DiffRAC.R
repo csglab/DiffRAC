@@ -29,7 +29,7 @@ DiffRAC.initialize <- function(formula, design, counts_num, counts_denom, mode, 
   
   ## ensure that the design data frame has the same rows as the columns of the count tables
   # choose only rows that correspond to a column in the count matrix
-  design <- design[ rownames(design) %in% colnames(counts_num), ]
+  design <- design[ rownames(design) %in% colnames(counts_num), , drop=F]
   if( nrow(design) != ncol(counts_num) )
   {
     stop("Incompatible or incomplete design matrix: some samples with count data were not found in design.")
