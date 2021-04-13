@@ -70,7 +70,7 @@ DiffRAC.initialize <- function(formula, design, counts_num, counts_denom, mode, 
     
     design_mat <- cbind(
       Intercept,
-      rbind( ident[,-1], ident[,-1] * bias ),
+      rbind( ident[,-1, drop=F], ident[,-1, drop=F] * bias ),
       Numerator,
       rbind( Zero, model_mat ) )
   } else { stop("Mode not recognized.") }
