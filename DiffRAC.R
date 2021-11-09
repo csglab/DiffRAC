@@ -166,9 +166,8 @@ DiffRAC <- function( formula, design, counts_num, counts_denom, mode="condition"
   
   # modify the design matrix based on the bias term (either optimized or provided as argument)
   cat(paste0("The bias constant is ",bias,"\n"))
-  drc$design_mat <- DiffRAC.modifyBias(drc$design_mat,mode,bias)
-  
   if (bias != 1) { # no need to re-estimate dispersions if bias == 1
+    drc$design_mat <- DiffRAC.modifyBias(drc$design_mat,mode,bias)
     cat("\nRe-estimating dispersion...\n")
     dds <- estimateDispersions(dds,modelMatrix=drc$design_mat)
   }
